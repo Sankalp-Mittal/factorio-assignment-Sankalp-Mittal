@@ -1,0 +1,5 @@
+Name: Sankalp Mittal
+Email: sankalpm22@iitk.ac.in, sankalp19june@gmail.com
+Language : Python 3.13.5
+OS: Debian WSL
+Libraries used can be found in requirements.txt and can be installed as detailed in README.md
