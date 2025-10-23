@@ -1,9 +1,34 @@
+# pytest test: factory
+
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-INPUT_JSON = '''
+def run_cli(main_rel_path: str, stdin_json: str):
+    """
+    Run a CLI Python script relative to this file's directory,
+    pass it JSON on stdin, and parse JSON from stdout.
+    """
+    root = Path(__file__).resolve().parent.parent
+    main = (root / main_rel_path).resolve()
+
+    proc = subprocess.run(
+        [sys.executable, str(main)],
+        input=stdin_json,
+        text=True,
+        capture_output=True,
+        cwd=str(root),
+    )
+
+    assert proc.returncode == 0, f"Process failed.\nSTDERR:\n{proc.stderr}\nSTDOUT:\n{proc.stdout}"
+    try:
+        return json.loads(proc.stdout)
+    except json.JSONDecodeError as e:
+        raise AssertionError(f"Output was not valid JSON.\nSTDOUT:\n{proc.stdout}") from e
+
+
+INPUT_JSON = r"""
 {
   "machines": {
     "assembler_1": {"crafts_per_min": 30},
@@ -39,9 +64,9 @@ INPUT_JSON = '''
   },
   "target": {"item": "green_circuit", "rate_per_min": 1800}
 }
-'''
+"""
 
-OUTPUT_JSON = '''
+EXPECTED_JSON = r"""
 {
   "per_machine_counts": {
     "assembler_1": 1,
@@ -58,29 +83,13 @@ OUTPUT_JSON = '''
   },
   "status": "ok"
 }
-'''
+"""
 
-ROOT = Path(__file__).resolve().parents[1]      # .../part2_assignment
-MAIN = ROOT / "factory" / "main.py"
-
-def _as_obj(x):  # parse if it's a JSON string
-    return json.loads(x) if isinstance(x, str) else x
-
-def test_factory_matches_expected():
-    proc = subprocess.run(
-        [sys.executable, str(MAIN)],
-        input=INPUT_JSON,
-        text=True,
-        capture_output=True,
-        cwd=str(ROOT),
-    )
-    assert proc.returncode == 0, f"stderr:\n{proc.stderr}\nstdout:\n{proc.stdout}"
-
-    actual = json.loads(proc.stdout)
-    expected = _as_obj(OUTPUT_JSON)
-    assert actual == expected, f"\nExpected:\n{expected}\nActual:\n{actual}\n"
+def test_factory_matches_expected_exactly():
+    actual = run_cli("factory/main.py", INPUT_JSON)
+    expected = json.loads(EXPECTED_JSON)
+    assert actual == expected, f"Mismatch.\\nExpected:\\n{expected}\\nActual:\\n{actual}"
 
 if __name__ == "__main__":
-    # Allow running directly without pytest
-    test_factory_matches_expected()
-    print("OK")
+    test_factory_matches_expected_exactly()
+    print("test_factory.py OK")

@@ -338,7 +338,7 @@ Fields
 * `cut_reachable`: nodes on the **source side** of the min-cut (after coalescing split nodes).
 * `demand_balance`: total shortfall (how much extra capacity the cut needs).
 * `tight_edges`: saturated edges crossing the cut (reachable → unreachable).
-  **flow_needed** is **equally split** across all tight edges (your Option-1 choice).
+  **flow_needed** is **equally split** across all tight edges. (Could also implement splitting in ratio to current flows but chosen this option because of simplicty)
 * `tight_nodes`: capped nodes whose internal `(v_in→v_out)` cap is tight across the cut.
 
 ---
