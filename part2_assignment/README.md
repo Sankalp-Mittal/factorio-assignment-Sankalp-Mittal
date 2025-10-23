@@ -184,7 +184,7 @@ Two reasonable policies exist:
 
 ---
 
-## 7) Determinism & tolerances
+## 7) Tolerances
 
 * Balance tolerance: `1e-9` (absolute).
 * Raw caps & machine caps: checked with small epsilons.
@@ -204,16 +204,6 @@ Given the sample input above and the spec speed formula, you might see:
     "green_circuit": 1636.363636,
     "iron_plate": 1363.636364,
     "copper_plate": 4090.909091
-  },
-  "per_recipe_effective_outputs_per_min": {
-    "green_circuit": 1800.0,
-    "iron_plate": 1636.363636,
-    "copper_plate": 4909.090909
-  },
-  "per_item_outputs_per_min": {
-    "green_circuit": 1800.0,
-    "iron_plate": 1636.363636,
-    "copper_plate": 4909.090909
   },
   "per_machine_counts": {
     "assembler_1": 1,
@@ -243,20 +233,7 @@ Typical `bottleneck_hint` values:
 
 ---
 
-## 10) Dependencies
-
-* Python 3.9+
-* `numpy`
-
-Install:
-
-```bash
-pip install -r part2_assignment/requirements.txt
-```
-
----
-
-## 11) Code map (top-level, no nested functions)
+## 10) Code map (top-level, no nested functions)
 
 * **Parsing & prep:** `read_stdin_json`, `process_input`, `compute_machine_effects`, `items_from_recipes`
 * **Math core:** `build_stoich_matrix`, `assemble_equalities`, `solve_nonnegative_equalities`
