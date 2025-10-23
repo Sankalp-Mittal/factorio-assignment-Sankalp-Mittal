@@ -1,5 +1,7 @@
 Name: Sankalp Mittal
 Email: sankalpm22@iitk.ac.in, sankalp19june@gmail.com
 Language : Python 3.13.5
-OS: Debian WSL
+OS: Debian GNU/Linux 13 (trixie)
+RAM: 8 GB
+CPU: 12th Gen Intel(R) Core(TM) i7-12700H (x86_64)
 Libraries used can be found in requirements.txt and can be installed as detailed in RUN.md
