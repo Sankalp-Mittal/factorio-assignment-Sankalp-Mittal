@@ -18,6 +18,14 @@ pip install -r requirements.txt
 ```bash
 python3 run_samples.py
 ```
+This runs pytest internally
+
+## Run Pytest for each part
+```bash
+pytest -q tests/test_belts.py
+pytest -q tests/test_factory.py
+```
+Does the tests for belts and factory part respectively
 
 ## Run Factory Steady State
 ```bash
