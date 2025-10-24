@@ -237,6 +237,71 @@ CASES = [
         }
         """
     },
+    {
+        "id": "cycle_exists",
+        "input": r"""
+        {
+            "machines": {
+            "assembler_1": {"crafts_per_min": 30},
+            "chemical": {"crafts_per_min": 60}
+            },
+            "recipes": {
+            "iron_plate": {
+                "machine": "chemical",
+                "time_s": 3.2,
+                "in": {"iron_ore": 1},
+                "out": {"iron_plate": 1}
+            },
+            "copper_plate": {
+                "machine": "chemical",
+                "time_s": 3.2,
+                "in": {"copper_ore": 1},
+                "out": {"copper_plate": 1}
+            },
+            "green_circuit": {
+                "machine": "assembler_1",
+                "time_s": 0.5,
+                "in": {"iron_plate": 1, "copper_plate": 3},
+                "out": {"green_circuit": 1}
+            },
+            "potion" : {
+                "machine": "assembler_1",
+                "time_s": 0.5,
+                "in": {"green_circuit": 2},
+                "out": {"potion":1, "iron_plate": 1}
+            }
+            },
+            "modules": {
+            "assembler_1": {"prod": 0.1, "speed": 0.15},
+            "chemical": {"prod": 0.2, "speed": 0.1}
+            },
+            "limits": {
+            "raw_supply_per_min": {"iron_ore": 5000, "copper_ore": 10000},
+            "max_machines": {"assembler_1": 300, "chemical": 300}
+            },
+            "target": {"item": "potion", "rate_per_min": 1800}
+        }
+        """ ,
+        "expected": r"""
+        {
+          "per_machine_counts": {
+            "assembler_1": 2,
+            "chemical": 7
+          },
+          "per_recipe_crafts_per_min": {
+            "copper_plate": 7438.0165289256265,
+            "green_circuit": 2975.206611570251,
+            "iron_plate": 979.338842975204,
+            "potion": 1636.3636363636383
+          },
+          "raw_consumption_per_min": {
+            "copper_ore": 7438.016528925625,
+            "iron_ore": 979.3388429752094
+          },
+          "status": "ok"
+        }
+        """
+    },
 ]
 
 @pytest.mark.parametrize("case", CASES, ids=[c.get("id", f"case_{i}") for i, c in enumerate(CASES)])
